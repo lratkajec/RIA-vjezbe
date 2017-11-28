@@ -55,7 +55,7 @@ $app->post(
 			 ]
 		);
 		//$cache->save($connection->lastInsertId(), $_POST);
-		//$rc->post("http://makovac.riteh.hexis.hr/api/insert", $_POST);
+		$rc->post("http://negulic.riteh.hexis.hr/api/insert", $_POST);
 		$lastID=$connection->lastInsertId();
 		echo $lastID;
 	}
@@ -136,7 +136,7 @@ $app->get(
 			$res=$rc->get("http://".$domain.".riteh.hexis.hr/api/printall");
 			$x[$domain]=json_decode($res->response, true);
 		}
-		print_r($x);
+		print_r($x['makovac'][1]['ID']);
 	}
 );
 
