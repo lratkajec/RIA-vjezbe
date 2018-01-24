@@ -5,6 +5,14 @@ use Phalcon\Db\Adapter\Pdo\Mysql;
 
 $app=new Micro();
 
+$connection=new Mysql(
+	[
+		"host"=>"localhost",
+		"username"=>"ratkajec",
+		"password"=>"hexis1",
+		"dbname"=>"ratkajec",
+	]
+);
 
 class Db{
 	public static $db;
@@ -87,7 +95,45 @@ class HtmlBuilder{
 	}
 }
 
-class QueryBuilder{
+/*class QueryBuilder{
+	$query=NULL;
+	function addSelect($table_name){
+		$this->query.="SELECT * FROM ".$table_name;
+	}
+	function addWhere($str, $value){
+		$this->query.=" AND WHERE ".$str." = ";
+	}
+	function getResults(){
+		$resultset=
+		return $resultset;
+	}
+}*/
+
+interface iInputField{
+	function getName();
+}
+
+class InputField implements iInputField{
+	private $name;
+	function __construct($name){
+		$this->name=$name;
+	}
+	function getName(){
+		return $this->name;
+	}
+	function __toString(){
+		return "<input type='text' name='".$this->name."' id='".$this->name."'>";
+	}
+}
+
+class InputFieldDecorator{
+	private $input;
+	function __construct(InputField $input){
+		$this->input=$input;
+	}
+	function __toString(){
+		return "<label for='".$this->input->getName()."'>".$this->input->getName()."".$this->input."</label>";
+	}
 }
 
 function db(){
@@ -113,6 +159,17 @@ $app->get(
 		$html_builder->addTitle();
 
 		$html_builder->build();
+	}
+);
+
+$app->get(
+	'/decorator',
+	function(){
+		$input=new InputField('username');
+		echo $input;
+		echo "<br>";
+		$inputDecorator=new InputFieldDecorator($input);
+		echo $inputDecorator;
 	}
 );
 
